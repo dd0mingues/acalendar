@@ -1,15 +1,13 @@
 import calendar
 import datetime
 import sqlite3
+from Calendar.app.database import database, loadDatabase
+
 
 def main():
-    conn = sqlite3.connect('exercise.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS exercice
-              (date TEXT, exercice_done INTEGER)''')
-    conn.commit()
-    conn.close()
-    
+    db = database('exercice.db')
+    db.log_exercise()
+    streak = db.get_streak()
 
 
 if __name__ == '__main__':
