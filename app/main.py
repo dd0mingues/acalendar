@@ -38,5 +38,7 @@ def main():
         db.view_calendar()
     del db
 
+    #test
+
 if __name__ == '__main__':
     main()
