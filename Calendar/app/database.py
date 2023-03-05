@@ -14,11 +14,14 @@ class database:
                     (date TEXT, exercise_done INTEGER)''')
         self.conn.commit()
 
-    def log_exercise(self):
-        today = datetime.date.today().strftime("%Y-%m-%d")
+    def log_exercise(self, date=None):
+        if date is None:
+            today = datetime.date.today().strftime("%Y-%m-%d")
+            date = today
         c = self.conn.cursor()
-        c.execute("INSERT INTO exercise (date, exercise_done) VALUES (?,?)", (today, 1))
+        c.execute("INSERT INTO exercise (date, exercise_done) VALUES (?,?)", (date, 1))
         self.conn.commit()
+        print("Exercise logged for {}.".format(date))
 
     def get_streak(self):
         c = self.conn.cursor()
