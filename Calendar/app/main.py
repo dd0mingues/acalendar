@@ -13,6 +13,7 @@ def main():
     
     subparsers = parser.add_subparsers(dest='command')
     subparsers.add_parser('streak', help='Get current exercise streak')
+    subparsers.add_parser("calendar", help= 'View Months Calendar')
     
     log_parser = subparsers.add_parser('log', help='Log exercise for today')
     log_parser.add_argument('--date', help='Log exercise for a specific date (YYYY-MM-DD format)')
@@ -21,8 +22,7 @@ def main():
     
     # process the command
     if args.command == 'streak':
-        streak = db.get_streak()
-        print(f"Current exercise streak: {streak}")
+        db.get_streak()
     elif args.command == 'log':
         if args.date is not None:
             try:
@@ -33,9 +33,9 @@ def main():
         else:
             date = datetime.date.today()
         db.log_exercise()
-        streak = db.get_streak()
-        print(f"Current exercise streak: {streak}")
-    # close the database connection
+        db.get_streak()
+    elif args.command == 'calendar':
+        db.view_calendar()
     del db
 
 if __name__ == '__main__':
