@@ -1,7 +1,4 @@
-import calendar
 import datetime
-import os
-import sqlite3
 import argparse
 from database import database
 
@@ -36,9 +33,6 @@ def main():
         db.get_streak()
     elif args.command == 'calendar':
         db.view_calendar()
-    del db
-
-    #test
 
 if __name__ == '__main__':
     main()

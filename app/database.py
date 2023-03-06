@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 class database:
     def __init__(self, db_name):
-        self.db_name =  os.getcwd() + '/calendar/data/' + db_name
+        self.db_name =  os.getcwd() + '/data/' + db_name
         self.conn = sqlite3.connect(self.db_name)
         self.create_table()
 
