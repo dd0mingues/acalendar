@@ -33,22 +33,40 @@ class database:
 
     def get_streak(self):
         c = self.conn.cursor()
-        c.execute("SELECT date FROM exercise ORDER BY date DESC")
+        c.execute("SELECT date FROM exercise WHERE exercise_done = 1 ORDER BY date ASC")
         rows = c.fetchall()
-        streak = 0
-        for i in range(len(rows)-1):
-            current = datetime.strptime(rows[i][0], '%Y-%m-%d').date()
-            prev = datetime.strptime(rows[i+1][0], '%Y-%m-%d').date()
-            if (current - prev).days == 1:
-                streak += 1
+        current_streak = 0
+        longest_streak = 0
+        for i, row in enumerate(rows):
+            print(row)
+            date = datetime.strptime(row[0], "%Y-%m-%d").date()
+            if i == 0:
+                current_streak = 1
             else:
-                break
-        
-        print(f"Current exercise streak: {streak+1}")
-        return streak+1
+                prev_date = datetime.strptime(rows[i-1][0], "%Y-%m-%d").date()
+                if date - prev_date == timedelta(days=1):
+                    current_streak += 1
+                elif date - prev_date == timedelta(days=0):
+                    #this solves for cases where exercice is logged twice in a day
+                    continue
+                else:
+                    if current_streak > longest_streak:
+                        longest_streak = current_streak
+                    current_streak = 1
+        if current_streak > longest_streak:
+            longest_streak = current_streak
+
+        print("Current streak:", current_streak)
+        print("Longest streak:", longest_streak)
     
     def view_calendar(self, year=None, month=None):
         """Print a calendar month with the days exercised highlighted."""
+        
+        if year is not None:
+            year = int(year)
+        if month is not None:
+            month = int(month)
+        
         today = datetime.today()
         if year is None:
             year = today.year
@@ -75,7 +93,10 @@ class database:
         # Print the calendar month
         print(first_day.strftime("%B %Y"))
         print("Mo Tu We Th Fr Sa Su")
-        for day in range(1, last_day.day + 1):
+        for day in range(1, first_day.weekday()+1):
+            print("  ", end=" ")
+        
+        for day in range(1, last_day.day):
             if day in days_exercised:
                 print("\033[32m{:2d}\033[0m".format(day), end=" ")
             else:

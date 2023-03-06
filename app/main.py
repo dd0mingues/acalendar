@@ -10,7 +10,10 @@ def main():
     
     subparsers = parser.add_subparsers(dest='command')
     subparsers.add_parser('streak', help='Get current exercise streak')
-    subparsers.add_parser("calendar", help= 'View Months Calendar')
+    calendar_parser = subparsers.add_parser("calendar", help= 'View Months Calendar')
+    calendar_parser.add_argument('--month', help='Show speciefic month') 
+    calendar_parser.add_argument('--year', help='Show speciefic year')    
+       
     
     log_parser = subparsers.add_parser('log', help='Log exercise for today')
     log_parser.add_argument('--date', help='Log exercise for a specific date (YYYY-MM-DD format)')
@@ -32,7 +35,7 @@ def main():
         db.log_exercise()
         db.get_streak()
     elif args.command == 'calendar':
-        db.view_calendar()
+        db.view_calendar(args.year, args.month)
 
 if __name__ == '__main__':
     main()
